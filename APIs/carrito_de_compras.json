@@ -1,0 +1,381 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Carrito de Compras API",
+      "version": "1.0.0",
+      "description": "API para la gestión del carrito de compras de un e-commerce."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000/api",
+        "description": "Servidor local"
+      }
+    ],
+    "paths": {
+      "/carrito": {
+        "post": {
+          "summary": "Crea un carrito vacío",
+          "description": "Crea un nuevo carrito vacío para un usuario autenticado.",
+          "requestBody": {
+            "description": "Datos del usuario",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "usuario_id": {
+                      "type": "string",
+                      "example": "000001"
+                    }
+                  },
+                  "required": ["usuario_id"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Carrito creado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Carrito creado"
+                      },
+                      "carrito_id": {
+                        "type": "string",
+                        "example": "CC1234"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Usuario no autenticado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario no autenticado (se denegó el ingreso a la sesión)."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/carrito/{carrito_id}/producto": {
+        "post": {
+          "summary": "Agregar un producto al carrito",
+          "description": "Agrega un producto al carrito especificado",
+          "parameters": [
+            {
+              "name": "carrito_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "CC1233"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Datos del producto a agregar",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "producto_id": {
+                      "type": "string",
+                      "example": "1111"
+                    },
+                    "cantidad": {
+                      "type": "integer",
+                      "example": 2,
+                      "default": 1
+                    }
+                  },
+                  "required": ["producto_id", "cantidad"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Producto agregado al carrito",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Producto agregado al carrito."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Producto sin stock",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No hay stock disponible del producto que quiere agregar al carrito."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Carrito no encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No se encontró el carrito especificado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/carrito/{carrito_id}": {
+        "get": {
+          "summary": "Ver contenido del carrito",
+          "description": "Obtiene el contenido del carrito especificado",
+          "parameters": [
+            {
+              "name": "carrito_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "abc123"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Contenido del carrito",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "carrito_id": {
+                        "type": "string",
+                        "example": "abc123"
+                      },
+                      "usuario_id": {
+                        "type": "string",
+                        "example": "123456"
+                      },
+                      "productos": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "producto_id": {
+                              "type": "string",
+                              "example": "1112"
+                            },
+                            "cantidad": {
+                              "type": "integer",
+                              "example": 2
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Carrito no encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No se encontró el carrito especificado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Vaciar carrito",
+          "description": "Vacía el carrito especificado.",
+          "parameters": [
+            {
+              "name": "carrito_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "abc123"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Carrito vaciado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Carrito vaciado."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Carrito no encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No se encontró el carrito especificado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/carrito/{carrito_id}/producto/{producto_id}": {
+        "delete": {
+          "summary": "Eliminar un producto del carrito",
+          "description": "Elimina el producto indicado del carrito especificado.",
+          "parameters": [
+            {
+              "name": "carrito_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "abc123"
+              }
+            },
+            {
+              "name": "producto_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "1113"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Producto eliminado del carrito",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Producto eliminado del carrito."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Producto no encontrado en el carrito",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Producto no encontrado en el carrito."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Carrito": {
+          "type": "object",
+          "properties": {
+            "carrito_id": {
+              "type": "string",
+              "example": "abc123"
+            },
+            "usuario_id": {
+              "type": "string",
+              "example": "000002"
+            },
+            "productos": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "producto_id": {
+                    "type": "string",
+                    "example": "7777"
+                  },
+                  "cantidad": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
