@@ -1,0 +1,168 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Gestión de Usuarios API",
+      "version": "1.0.0",
+      "description": "API para la gestión de usuarios del e-commerce."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5001/api",
+        "description": "Servidor local"
+      }
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "summary": "Iniciar sesión",
+          "description": "Permite a un usuario iniciar sesión proporcionando sus credenciales.",
+          "requestBody": {
+            "description": "Credenciales del usuario",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "usuario1"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "password123"
+                    }
+                  },
+                  "required": ["username", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Inicio de sesión exitoso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Inicio de sesión exitoso."
+                      },
+                      "usuario_id": {
+                        "type": "string",
+                        "example": "123456"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Credenciales inválidas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Credenciales inválidas."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usuarios/{usuario_id}": {
+        "get": {
+          "summary": "Obtener datos del usuario",
+          "description": "Obtiene los datos del usuario especificado.",
+          "parameters": [
+            {
+              "name": "usuario_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "123456"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Datos del usuario",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "usuario_id": {
+                        "type": "string",
+                        "example": "123456"
+                      },
+                      "username": {
+                        "type": "string",
+                        "example": "usuario1"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "usuario1@example.com"
+                      },
+                      "nombre": {
+                        "type": "string",
+                        "example": "Usuario Uno"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Usuario no encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario no encontrado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Usuario": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "example": "usuario1"
+            },
+            "password": {
+              "type": "string",
+              "example": "password123"
+            },
+            "usuario_id": {
+              "type": "string",
+              "example": "123456"
+            }
+          },
+          "required": ["username", "password"]
+        }
+      }
+    }
+  }
+  

@@ -3,7 +3,7 @@
     "info": {
       "title": "Carrito de Compras API",
       "version": "1.0.0",
-      "description": "API para la gestión del carrito de compras de un e-commerce."
+      "description": "API para la gestión del carrito de compras del  e-commerce."
     },
     "servers": [
       {
@@ -44,7 +44,7 @@
                     "properties": {
                       "message": {
                         "type": "string",
-                        "example": "Carrito creado"
+                        "example": "Carrito creado."
                       },
                       "carrito_id": {
                         "type": "string",
