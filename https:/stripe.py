@@ -17,7 +17,7 @@ def create_checkout_session():
 
         line_items = [{
             'price_data': {
-                'currency': 'ars',
+                'currency': 'usd',
                 'product_data': {
                     'name': item['title'],
                 },
