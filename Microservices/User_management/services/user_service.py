@@ -1,21 +1,14 @@
 from models.user import User
 
 class UserService:
-
-    def __init__(self):
-        # Conexión a la base de datos de los usuarios (creada en MongoDB)
-        self.users = {
-            "123456": User("usuario1", "password123", "123456", "usuario1@example.com", "Usuario Uno")
-        }
-
-    def authenticate(self, username, password):
-        for user in self.users.values():
-            if user.username == username and user.password == password:
-                return user.to_dict()
-        return None
-
-    def get_user_by_id(self, usuario_id):
-        user = self.users.get(usuario_id)
+    def __init__(self, db_service):
+        self.user_model = User(db_service.get_db())
+    
+    def login(self, username, password):
+        user = self.user_model.validate_user(username, password)
         if user:
-            return user.to_dict()
+            return user
         return None
+    
+    def get_user(self, user_id):
+        return self.user_model.get_user_by_id(user_id)
