@@ -1,0 +1,253 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Métricas API",
+      "description": "API para gestionar métricas de rendimiento, clics y visitas del e-commerce.",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api"
+      }
+    ],
+    "paths": {
+      "/metrics": {
+        "get": {
+          "summary": "Obtener todas las métricas",
+          "responses": {
+            "200": {
+              "description": "Lista de métricas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Metric"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Crear una nueva métrica",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewMetric"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Métrica creada",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/metrics/performance": {
+        "get": {
+          "summary": "Obtener métricas de rendimiento",
+          "responses": {
+            "200": {
+              "description": "Lista de métricas de rendimiento",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Metric"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/metrics/clicks": {
+        "get": {
+          "summary": "Obtener métricas de clics",
+          "responses": {
+            "200": {
+              "description": "Lista de métricas de clics",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Metric"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/metrics/visits": {
+        "get": {
+          "summary": "Obtener métricas de visitas",
+          "responses": {
+            "200": {
+              "description": "Lista de métricas de visitas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Metric"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/metrics/{id}": {
+        "get": {
+          "summary": "Obtener una métrica específica por su ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Métrica obtenida",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Métrica no encontrada"
+            }
+          }
+        },
+        "put": {
+          "summary": "Actualizar una métrica específica por su ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewMetric"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Métrica actualizada",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Métrica no encontrada"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Eliminar una métrica específica por su ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Métrica eliminada"
+            },
+            "404": {
+              "description": "Métrica no encontrada"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Metric": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "60c72b2f9b1e8b001c8e4a5d"
+            },
+            "type": {
+              "type": "string",
+              "example": "performance"
+            },
+            "value": {
+              "type": "integer",
+              "example": 95
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2023-06-24T12:00:00Z"
+            }
+          }
+        },
+        "NewMetric": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "clicks"
+            },
+            "value": {
+              "type": "integer",
+              "example": 100
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2023-06-24T12:00:00Z"
+            }
+          }
+        }
+      }
+    }
+  }  
