@@ -13,6 +13,10 @@ En este repositorio encontrarán el desarrollo referido al back-end del eCommerc
 
     pip install -r requirements.txt
 
-**3)** Ejecutar el script desde la raíz del repositorio.
+**3)** Dar los permisos necesarios para el script desde la terminal.
+
+    chmod +x start_services.sh
+
+**4)** Ejecutar el script desde la raíz del repositorio.
 
     ./start_services.sh

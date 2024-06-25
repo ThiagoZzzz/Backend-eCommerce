@@ -19,5 +19,3 @@ USER_MANAGEMENT_PID=$!
 wait $CHECKOUT_PID
 wait $SEARCH_PID
 wait $USER_MANAGEMENT_PID
-
-chmod +x start_services.sh
