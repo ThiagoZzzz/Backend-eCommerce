@@ -3,7 +3,7 @@
     "info": {
       "title": "Checkout API",
       "version": "1.0.0",
-      "description": "API para gestionar el proceso de checkout y pagos del e-commerce con concexión a la API de Mercado Pago a través de los microservicos del backend"
+      "description": "API para gestionar el proceso de checkout y pagos del e-commerce con conexión a la API de Mercado Pago a través de los microservicos del backend"
     },
     "servers": [
       {
