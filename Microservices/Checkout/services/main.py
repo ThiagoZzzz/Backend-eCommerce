@@ -39,8 +39,8 @@ def create_checkout_session():
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url='http://127.0.0.1:5501/success.html',
-            cancel_url='http://127.0.0.1:5501/cancel.html',
+            success_url='https://ecommerce-oficial.vercel.app/',
+            cancel_url='https://ecommerce-oficial.vercel.app/',
         )
         return jsonify({'sessionId': session.id})
     except Exception as e:
