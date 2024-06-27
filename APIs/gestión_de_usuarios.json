@@ -1,140 +1,116 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-      "title": "Gestión de Usuarios API",
-      "version": "1.0.0",
-      "description": "API para la gestión de usuarios del e-commerce."
-    },
-    "servers": [
-      {
-        "url": "http://localhost:5001/api",
-        "description": "Servidor local"
-      }
-    ],
-    "paths": {
-      "/login": {
-        "post": {
-          "summary": "Iniciar sesión",
-          "description": "Permite a un usuario iniciar sesión proporcionando sus credenciales.",
-          "requestBody": {
-            "description": "Credenciales del usuario",
-            "required": true,
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gestión de Usuarios API",
+    "version": "1.0.0",
+    "description": "API para la gestión de usuarios del e-commerce."
+  },
+  "servers": [
+    {
+      "url": "https://localhost:5001/api",
+      "description": "Servidor local"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Iniciar sesión",
+        "description": "Permite a un usuario iniciar sesión proporcionando sus credenciales.",
+        "requestBody": {
+          "description": "Credenciales del usuario",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                    "maxLength": 256,
+                    "example": "usuario1@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+                    "maxLength": 128,
+                    "example": "password123"
+                  }
+                },
+                "required": ["username", "password"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "username": {
+                    "message": {
                       "type": "string",
-                      "example": "usuario1"
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+                      "example": "Inicio de sesión exitoso."
                     },
-                    "password": {
-                      "type": "string",
-                      "example": "password123"
+                    "usuario_id": {
+                      "type": "integer",
+                      "format": "int32",
+                      "minimum": 1,
+                      "maximum": 1000000,
+                      "example": 123456
                     }
                   },
-                  "required": ["username", "password"]
+                  "additionalProperties": false
                 }
               }
             }
           },
-          "responses": {
-            "200": {
-              "description": "Inicio de sesión exitoso",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Inicio de sesión exitoso."
-                      },
-                      "usuario_id": {
-                        "type": "string",
-                        "example": "123456"
-                      }
+          "401": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+                      "example": "Credenciales inválidas."
                     }
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Credenciales inválidas",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Credenciales inválidas."
-                      }
-                    }
-                  }
+                  },
+                  "additionalProperties": false
                 }
               }
             }
-          }
-        }
-      },
-      "/usuarios/{usuario_id}": {
-        "get": {
-          "summary": "Obtener datos del usuario",
-          "description": "Obtiene los datos del usuario especificado.",
-          "parameters": [
-            {
-              "name": "usuario_id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "123456"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Datos del usuario",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "usuario_id": {
-                        "type": "string",
-                        "example": "123456"
-                      },
-                      "username": {
-                        "type": "string",
-                        "example": "usuario1"
-                      },
-                      "email": {
-                        "type": "string",
-                        "example": "usuario1@example.com"
-                      },
-                      "nombre": {
-                        "type": "string",
-                        "example": "Usuario Uno"
-                      }
+          },
+          "default": {
+            "description": "Error inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+                      "example": "Error inesperado."
                     }
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "Usuario no encontrado",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Usuario no encontrado."
-                      }
-                    }
-                  }
+                  },
+                  "additionalProperties": false
                 }
               }
             }
@@ -142,27 +118,132 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "Usuario": {
-          "type": "object",
-          "properties": {
-            "username": {
-              "type": "string",
-              "example": "usuario1"
-            },
-            "password": {
-              "type": "string",
-              "example": "password123"
-            },
-            "usuario_id": {
-              "type": "string",
-              "example": "123456"
+    "/usuarios/{usuario_id}": {
+      "get": {
+        "summary": "Obtener datos del usuario",
+        "description": "Obtiene los datos del usuario especificado.",
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 1000000,
+              "example": 123456
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos del usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
             }
           },
-          "required": ["username", "password"]
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+                      "example": "Usuario no encontrado."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error inesperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+                      "example": "Error inesperado."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
         }
       }
     }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "maxLength": 256,
+            "example": "usuario1@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+            "maxLength": 128,
+            "example": "password&123"
+          },
+          "usuario_id": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 1000000,
+            "example": 123456
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "example": "usuario1@example.com"
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z0-9\\s]{1,256}$",
+            "example": "Usuario Uno"
+          }
+        },
+        "required": ["username", "password"],
+        "additionalProperties": false
+      }
+    }
   }
-  
+}
