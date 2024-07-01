@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://localhost:5001/api",
+      "url": "https://github.com/ThiagoZzzz/Backend-eCommerce/blob/pre-producci%C3%B3n/APIs/carrito_de_compras.json",
       "description": "Servidor local"
     }
   ],
