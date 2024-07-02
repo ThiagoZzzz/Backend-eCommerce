@@ -4,11 +4,12 @@ import psycopg2
 app = Flask(__name__)
 
 table_name = 'public.inventario'
-columna_principal = 'nombre'
+columna_principal = 'name'
+columna_precio = 'price'
 
 '''Configuro la conexión a PostgreSQL'''
-connection = psycopg2.connect(host='monorail.proxy.rlwy.net', user='postgres', password='BzZBcWrNubzzjWJNqnaMIswyAxAkuQrK',
-                              database='railway', port='51772')
+connection = psycopg2.connect(host='viaduct.proxy.rlwy.net', user='postgres', password='vELhyPjXNhjnFLdaEhIVXeJIEcWxBhPl',
+                              database='railway', port='19019')
 
 
 '''Usamos el decorador @app.route para enrutar a la URL principal. La función index()
@@ -16,6 +17,8 @@ connection = psycopg2.connect(host='monorail.proxy.rlwy.net', user='postgres', p
 
 @app.route('/')
 def index():
+    '''Con render_template, Flask automáticamente buscará el archivo index.html
+       dentro de la carpeta templates.'''
     return render_template('index.html')
 
 '''Usamos el decorador @app.route para enrutar a la URL '/productos'. La función get_productos()
@@ -50,16 +53,19 @@ def subir_producto():
     data = request.get_json() # Obtenemos los datos del producto del cuerpo de la solicitud.
 
     # Verificamos y validamos que estén todos los datos obligatorios y bien pasados:
-    if 'nombre' not in data or 'precio' not in data:
+    if columna_principal not in data or columna_precio not in data:
         abort(400, 'Se requieren el nombre y el precio del producto')
 
     # Verificamos si el precio es un número positivo
-    if not isinstance(data['precio'], (int, float)) or data['precio'] <= 0:
+    if not isinstance(data[columna_precio], (int, float)) or data[columna_precio] <= 0:
         abort(400, 'El precio del producto debe ser un número positivo')
     
     cur = connection.cursor() #  Creamos un cursor para ejecutar comandos SQL en la base de datos.
+
+    consulta = f"INSERT INTO {table_name} ({columna_principal}, {columna_precio}) VALUES (%s, %s)"
+
     # Ejecución de consulta para que agregue el producto:
-    cur.execute(f"INSERT INTO {table_name} (nombre, precio) VALUES (%s, %s)", (data['nombre'], data['precio']))
+    cur.execute(consulta, (data[columna_principal], data[columna_precio]))
     connection.commit() # Guardamos los cambios en la Base de Datos.
     cur.close() # Cerramos el cursor y liberamos cualquier recurso en memoria asociado a él.
 

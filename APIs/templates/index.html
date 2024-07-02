@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <style>
+        /* Estilos opcionales para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Listado de Productos</h2>
+
+    <!-- Formulario de búsqueda -->
+    <form action="/productos" method="GET">
+        <div class="form-group">
+            <label for="search">Buscar por nombre:</label>
+            <input type="text" id="search" name="search" placeholder="Ingrese nombre del producto">
+            <button type="submit">Buscar</button>
+        </div>
+    </form>
+
+    <!-- Tabla de resultados -->
+    {% if productos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto[1] }}</td> <!-- Nombre -->
+                <td>{{ producto[2] }}</td> <!-- Precio -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No se encontraron productos.</p>
+    {% endif %}
+
+    <!-- Formulario para agregar un nuevo producto -->
+    <h2>Agregar Nuevo Producto</h2>
+    <form action="/productos" method="POST" id="form-agregar">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+        </div>
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <!-- Mensaje de éxito o error -->
+    <div id="mensaje"></div>
+
+    <script>
+        // Manejo de la solicitud POST para agregar productos
+        document.getElementById('form-agregar').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var form = event.target;
+            var formData = new FormData(form);
+
+            fetch('/productos', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensaje').innerText = data.message;
+                form.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('mensaje').innerText = 'Error al agregar el producto.';
+            });
+        });
+    </script>
+</body>
+</html>
