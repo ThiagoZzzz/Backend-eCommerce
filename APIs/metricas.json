@@ -105,7 +105,7 @@
     "/metrics": {
       "get": {
         "summary": "Obtener todas las métricas",
-        "description": "Obtiene unalista de todas las métricas disponibles.",
+        "description": "Obtiene una lista de todas las métricas disponibles.",
         "security": [
           {
             "bearerAuth": []
